@@ -1,11 +1,13 @@
+#[derive(Debug)]
 pub struct AttributeInfo {
-    pub(crate) attribute_name_index: u16,
+    pub attribute_name_index: u16,
     // Length does not include first 6 bytes representing attribute_name_index & attribute_length
     // attribute_length: u32,
     // info: [AttributeInfoDetails],
-    pub(crate) info: Vec<AttributeInfoDetails>
+    pub info: Vec<AttributeInfoDetails>,
 }
 
+#[derive(Debug)]
 pub enum AttributeInfoDetails {
     ConstantValue {
         // Points at constant_pool
@@ -15,22 +17,35 @@ pub enum AttributeInfoDetails {
         max_stack: u16,
         max_locals: u16,
         code: Vec<u8>,
-        exception_table: Vec<ExceptionTable>,
-        attribute_info: Vec<AttributeInfo>
+        exception_tables: Vec<ExceptionTable>,
+        attributes: Vec<AttributeInfo>,
         // code_length: u32,
         // code: [u8],
         // exception_table_length: u16,
         // exception_table: [ExceptionTable],
         // attributes_count: u16,
         // attribute_info: [AttributeInfo]
-    }
+    },
+    LineNumberTable {
+        entries: Vec<LineNumberTableEntry>,
+    },
+    SourceFile {
+        sourcefile_index: u16,
+    },
 }
 
+#[derive(Debug)]
+pub struct LineNumberTableEntry {
+    pub start_pc: u16,
+    pub line_number: u16,
+}
+
+#[derive(Debug)]
 pub struct ExceptionTable {
-    start_pc: u16,
-    end_pc: u16,
-    handler_c: u16,
-    catch_type: u16,
+    pub start_pc: u16,
+    pub end_pc: u16,
+    pub handler_pc: u16,
+    pub catch_type: u16,
 }
 
 // Required:

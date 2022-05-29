@@ -3,11 +3,11 @@ use attr::AttributeInfo;
 
 pub struct FieldInfo {
     // TODO: Should be of type FieldFlags?
-    access_flags: u16,
-    name_index: u16,
-    descriptor_index: u16,
+    pub access_flags: u16,
+    pub name_index: u16,
+    pub descriptor_index: u16,
     // attributes_count: u16,
-    attribute_info: Vec<AttributeInfo>
+    pub attributes: Vec<AttributeInfo>
 }
 
 pub trait FieldFlags {
