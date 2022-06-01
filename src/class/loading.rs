@@ -1,5 +1,5 @@
-use crate::attr::{AttributeInfo, AttributeInfoDetails, ExceptionTable, LineNumberTableEntry};
-use crate::attr::AttributeInfoDetails::SourceFile;
+use crate::attr::{AttributeInfo, ExceptionTable, LineNumberTableEntry};
+use crate::attr::AttributeInfo::SourceFile;
 use crate::class::ClassFile;
 use crate::class::ClassFlags;
 use crate::constant_pool::ConstantPoolInfo;
@@ -210,7 +210,6 @@ impl ClassFileLoader {
             println!("Attribute name: {}", attribute_name);
 
             self.reader.read_u32(); // attribute_length
-            let mut info: Vec<AttributeInfoDetails> = Vec::new();
 
             let attribute = match attribute_name.as_str() {
                 "Code" => {
@@ -234,7 +233,7 @@ impl ClassFileLoader {
                     let code_attributes_count = self.reader.read_u16();
                     let code_attributes = self.read_attributes(code_attributes_count);
 
-                    AttributeInfoDetails::Code {
+                    AttributeInfo::Code {
                         max_stack,
                         max_locals,
                         code,
@@ -251,7 +250,7 @@ impl ClassFileLoader {
                             line_number: self.reader.read_u16(),
                         })
                     }
-                    AttributeInfoDetails::LineNumberTable {
+                    AttributeInfo::LineNumberTable {
                         entries
                     }
                 }
@@ -265,12 +264,7 @@ impl ClassFileLoader {
 
             // println!("{:?}", attribute);
 
-            info.push(attribute);
-
-            attributes.push(AttributeInfo {
-                attribute_name_index,
-                info,
-            });
+            attributes.push(attribute);
         }
         attributes
     }

@@ -1,17 +1,7 @@
 #[derive(Debug)]
-pub struct AttributeInfo {
-    pub attribute_name_index: u16,
-    // Length does not include first 6 bytes representing attribute_name_index & attribute_length
-    // attribute_length: u32,
-    // info: [AttributeInfoDetails],
-    pub info: Vec<AttributeInfoDetails>,
-}
-
-#[derive(Debug)]
-pub enum AttributeInfoDetails {
+pub enum AttributeInfo {
     ConstantValue {
-        // Points at constant_pool
-        constantvalue_index: u16,
+        constantvalue_index: u16, // Points at constant_pool
     },
     Code {
         max_stack: u16,
@@ -19,18 +9,12 @@ pub enum AttributeInfoDetails {
         code: Vec<u8>,
         exception_tables: Vec<ExceptionTable>,
         attributes: Vec<AttributeInfo>,
-        // code_length: u32,
-        // code: [u8],
-        // exception_table_length: u16,
-        // exception_table: [ExceptionTable],
-        // attributes_count: u16,
-        // attribute_info: [AttributeInfo]
     },
     LineNumberTable {
         entries: Vec<LineNumberTableEntry>,
     },
     SourceFile {
-        sourcefile_index: u16,
+        sourcefile_index: u16, // Points at constant_pool
     },
 }
 
