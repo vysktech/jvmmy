@@ -44,4 +44,8 @@ impl ByteReader {
         self.index += length;
         result
     }
+
+    pub fn is_end(&self) -> bool {
+        self.index == self.contents.len()
+    }
 }

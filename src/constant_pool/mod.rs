@@ -48,8 +48,6 @@ pub enum ConstantPoolInfo {
     },
     // tag=1
     Utf8 {
-        // length: u16,
-        // bytes: [u8; length],
         string: String,
     },
     // tag=15
@@ -80,4 +78,12 @@ pub enum ConstantPoolInfo {
     Package {
         name_index: u16,
     },
+}
+
+#[derive(Debug)]
+pub enum ConstantPoolRuntime {
+    MethodRef {
+        // TODO: Should be pointer
+        index: usize, // Points to a Method in a Class struct
+    }
 }

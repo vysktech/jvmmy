@@ -53,6 +53,43 @@ impl ClassFileLoader {
         for _ in 0..constant_pool_count - 1 { // Constant pool index starts at 1
             let tag = self.reader.read_u8();
             match tag {
+                1 => {
+                    let mut length: usize = self.reader.read_u16().into();
+                    let string = self.reader.read_str(length);
+                    let info = ConstantPoolInfo::Utf8 {
+                        string: string.to_string(),
+                    };
+                    println!("{:?}", info);
+                    self.constant_pool.push(info);
+                }
+                3 => {
+                    let info = ConstantPoolInfo::Integer {
+                        bytes: self.reader.read_u32(),
+                    };
+                    println!("{:?}", info);
+                    self.constant_pool.push(info);
+                }
+                4 => {
+                    let info = ConstantPoolInfo::Float {
+                        bytes: self.reader.read_u32(),
+                    };
+                    println!("{:?}", info);
+                    self.constant_pool.push(info);
+                }
+                7 => {
+                    let info = ConstantPoolInfo::Class {
+                        name_index: self.reader.read_u16(),
+                    };
+                    println!("{:?}", info);
+                    self.constant_pool.push(info);
+                }
+                8 => {
+                    let info = ConstantPoolInfo::String {
+                        string_index: self.reader.read_u16(),
+                    };
+                    println!("{:?}", info);
+                    self.constant_pool.push(info);
+                }
                 9 => {
                     let info = ConstantPoolInfo::FieldRef {
                         class_index: self.reader.read_u16(),
@@ -65,29 +102,6 @@ impl ClassFileLoader {
                     let info = ConstantPoolInfo::MethodRef {
                         class_index: self.reader.read_u16(),
                         name_and_type_index: self.reader.read_u16(),
-                    };
-                    println!("{:?}", info);
-                    self.constant_pool.push(info);
-                }
-                8 => {
-                    let info = ConstantPoolInfo::String {
-                        string_index: self.reader.read_u16(),
-                    };
-                    println!("{:?}", info);
-                    self.constant_pool.push(info);
-                }
-                7 => {
-                    let info = ConstantPoolInfo::Class {
-                        name_index: self.reader.read_u16(),
-                    };
-                    println!("{:?}", info);
-                    self.constant_pool.push(info);
-                }
-                1 => {
-                    let mut length: usize = self.reader.read_u16().into();
-                    let string = self.reader.read_str(length);
-                    let info = ConstantPoolInfo::Utf8 {
-                        string: string.to_string(),
                     };
                     println!("{:?}", info);
                     self.constant_pool.push(info);
@@ -257,6 +271,11 @@ impl ClassFileLoader {
                 "SourceFile" => {
                     SourceFile {
                         sourcefile_index: self.reader.read_u16(),
+                    }
+                }
+                "ConstantValue" => {
+                    AttributeInfo::ConstantValue {
+                        constantvalue_index: self.reader.read_u16()
                     }
                 }
                 _ => panic!("Unknown attribute {}", attribute_name)

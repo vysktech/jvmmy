@@ -1,6 +1,6 @@
 use crate::constant_pool::ConstantPoolInfo;
 
-pub struct Frame<'a> {
+pub struct Frame {
     // Size of local_vars is compile-time, determined by Code attribute.
     // Each byte holds a single primitive type, reference or returnAddress.
     // Longs and doubles occupy two bytes.
@@ -18,7 +18,7 @@ pub struct Frame<'a> {
     // It also contains parameters and return values for methods.
     // Each value takes up one unit (of size), but longs and doubles take up two units.
     pub op_stack: Vec<u8>,
-    pub constant_pool: &'a[ConstantPoolInfo],
+    // pub constant_pool: &[ConstantPoolInfo],
 }
 
 pub enum VariableType {
